@@ -8,8 +8,7 @@ export class ProdutoController {
 
   @Post()
   async salvarProduto(@Body() produto: CriarProdutoDTO) {
-    this.produtoRepository.salvar(produto);
-    return { mensagem: 'Produto salvo!', produto };
+    return this.produtoRepository.salvar(produto);
   }
 
   @Get()

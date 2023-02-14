@@ -8,12 +8,11 @@ export class UsuarioController {
 
   @Post()
   async criarUsuario(@Body() usuario: CriarUsuarioDTO) {
-    this.usuarioRepository.salvar(usuario);
-    return { mensagem: 'usuario criado!', usuario };
+    return await this.usuarioRepository.salvar(usuario);
   }
 
   @Get()
   async listarUsuarios() {
-    return this.usuarioRepository.listar();
+    return await this.usuarioRepository.listar();
   }
 }
