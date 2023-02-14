@@ -16,6 +16,10 @@ export class UsuarioRepository {
     return this.usuarios;
   }
 
+  async obterPeloId(id) {
+    return this.usuarios.find((u) => u.id === id);
+  }
+
   async existeComEmail(email: string) {
     const possivelUsuario = this.usuarios.find((u) => u.email === email);
 

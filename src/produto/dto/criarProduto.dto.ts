@@ -5,14 +5,20 @@ import {
   IsNotEmpty,
   IsNumber,
   IsPositive,
+  IsUUID,
   MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
+import { UsuarioExistente } from 'src/usuario/validacao/usuarioExistente.validator';
 import { CaracteristicaProdutoDTO } from './caracteristicaProduto.dt';
 import { ImagemProdutoDTO } from './imagemProduto.dto';
 
 export class CriarProdutoDTO {
+  @IsUUID(undefined, { message: 'Id de usuário inválido' })
+  @UsuarioExistente({ message: 'Id de usuário não existe' })
+  usuarioId: string;
+
   @IsNotEmpty({ message: 'Nome não pode ser vazio' })
   nome: string;
 
