@@ -1,19 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { CriarUsuarioDTO } from './dto/criarUsuario.dto';
+import { UsuarioEntity } from './usuario.entity';
 
 @Injectable()
 export class UsuarioRepository {
-  private usuarios = [];
+  private usuarios: UsuarioEntity[] = [];
 
-  async salvar(usuario: CriarUsuarioDTO) {
-    const novoUsuario = { id: randomUUID(), ...usuario };
-    this.usuarios.push(novoUsuario);
-    return novoUsuario;
+  async salvar(usuario: UsuarioEntity) {
+    usuario.id = randomUUID();
+    this.usuarios.push(usuario);
+    return usuario;
   }
 
   async listar() {
     return this.usuarios;
+  }
+
+  async atualizar(id: string, dadosUsuario: Partial<UsuarioEntity>) {
+    const usuario = this.usuarios.find((u) => u.id === id);
+
+    if (!usuario) {
+      throw new Error('Usuário não existe');
+    }
+
+    delete dadosUsuario.id;
+
+    Object.entries(dadosUsuario).forEach(([chave, valor]) => {
+      usuario[chave] = valor;
+    });
+
+    return usuario;
   }
 
   async obterPeloId(id) {
