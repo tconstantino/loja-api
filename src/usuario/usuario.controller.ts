@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { AtualizarUsuarioDTO } from './dto/atualizarUsuario.dto';
 import { CriarUsuarioDTO } from './dto/criarUsuario.dto';
 import { ListarUsuarioDTO } from './dto/listarUsuario.dto';
@@ -24,6 +24,7 @@ export class UsuarioController {
   @Get()
   async listarUsuarios() {
     const usuarios = await this.usuarioRepository.listar();
+
     const lista = usuarios.map(
       (u) => new ListarUsuarioDTO(u.id, u.nome, u.email),
     );
@@ -41,10 +42,31 @@ export class UsuarioController {
       dadosUsuario,
     );
 
-    return new ListarUsuarioDTO(
-      usuarioAtualizado.id,
-      usuarioAtualizado.nome,
-      usuarioAtualizado.email,
-    );
+    if(usuarioAtualizado) {
+      return new ListarUsuarioDTO(
+        usuarioAtualizado.id,
+        usuarioAtualizado.nome,
+        usuarioAtualizado.email,
+      );
+    }
+    else {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+  }
+
+  @Delete('/:id')
+  async removerUsuario(@Param('id') id: string) {
+    const usuarioRemovido = await this.usuarioRepository.remover(id);
+
+    if(usuarioRemovido) {
+      return new ListarUsuarioDTO(
+        usuarioRemovido.id,
+        usuarioRemovido.nome,
+        usuarioRemovido.email,
+      );
+    }
+    else {
+      throw new NotFoundException('Usuário não encontrado');
+    }
   }
 }

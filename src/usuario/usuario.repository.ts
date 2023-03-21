@@ -17,22 +17,20 @@ export class UsuarioRepository {
   }
 
   async atualizar(id: string, dadosUsuario: Partial<UsuarioEntity>) {
-    const usuario = this.usuarios.find((u) => u.id === id);
+    const usuario = await this.obterPeloId(id);
 
-    if (!usuario) {
-      throw new Error('Usuário não existe');
+    if (usuario) {
+      delete dadosUsuario.id;
+
+      Object.entries(dadosUsuario).forEach(([chave, valor]) => {
+        usuario[chave] = valor;
+      });
     }
-
-    delete dadosUsuario.id;
-
-    Object.entries(dadosUsuario).forEach(([chave, valor]) => {
-      usuario[chave] = valor;
-    });
 
     return usuario;
   }
 
-  async obterPeloId(id) {
+  async obterPeloId(id: string) {
     return this.usuarios.find((u) => u.id === id);
   }
 
@@ -40,5 +38,16 @@ export class UsuarioRepository {
     const possivelUsuario = this.usuarios.find((u) => u.email === email);
 
     return possivelUsuario !== undefined;
+  }
+
+  async remover(id: string) {
+    const usuario = await this.obterPeloId(id);
+
+    if(usuario) {
+      const indice = this.usuarios.indexOf(usuario);
+      this.usuarios.splice(indice, 1);
+    }
+
+    return usuario;
   }
 }
