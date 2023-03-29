@@ -37,7 +37,7 @@ export class ProdutoRepository {
   async remover(id: string) {
     const produto = await this.obterPeloId(id);
 
-    if(produto) {
+    if (produto) {
       const indice = this.produtos.indexOf(produto);
       this.produtos.splice(indice, 1);
     }

@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CaracteristicaProdutoEntity } from './caracteristicaProduto.entity';
 import { AtualizarProdutoDTO } from './dto/atualizarProduto.dto';
 import { CaracteristicaProdutoDTO } from './dto/caracteristicaProduto.dto';
@@ -50,13 +59,18 @@ export class ProdutoController {
   }
 
   @Put('/:id')
-  async atualizarProduto(@Param('id') id: string, @Body() dadosProduto: AtualizarProdutoDTO) {
-    const produtoAtualizado = await this.produtoRepository.atualizar(id, dadosProduto);
+  async atualizarProduto(
+    @Param('id') id: string,
+    @Body() dadosProduto: AtualizarProdutoDTO,
+  ) {
+    const produtoAtualizado = await this.produtoRepository.atualizar(
+      id,
+      dadosProduto,
+    );
 
-    if(produtoAtualizado) {
+    if (produtoAtualizado) {
       return this.criarListarProdutoDTO(produtoAtualizado);
-    }
-    else {
+    } else {
       throw new NotFoundException('Produto não encontrado');
     }
   }
@@ -65,11 +79,10 @@ export class ProdutoController {
   async removerProduto(@Param('id') id: string) {
     const produtoRemovido = await this.produtoRepository.remover(id);
 
-    if(produtoRemovido) {
+    if (produtoRemovido) {
       return this.criarListarProdutoDTO(produtoRemovido);
-    }
-    else {
-      throw new NotFoundException('Produto não encontrado')
+    } else {
+      throw new NotFoundException('Produto não encontrado');
     }
   }
 
@@ -95,7 +108,7 @@ export class ProdutoController {
         imagemProdutoDTO.descricao = i.descricao;
 
         return imagemProdutoDTO;
-      })
+      }),
     );
   }
 }

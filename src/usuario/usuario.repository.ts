@@ -43,7 +43,7 @@ export class UsuarioRepository {
   async remover(id: string) {
     const usuario = await this.obterPeloId(id);
 
-    if(usuario) {
+    if (usuario) {
       const indice = this.usuarios.indexOf(usuario);
       this.usuarios.splice(indice, 1);
     }
